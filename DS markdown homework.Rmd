@@ -1,0 +1,11 @@
+---
+title: "Exploratory Data Analysis"
+author: "Deja Simon"
+date: "3/2/2021"
+output: html_document
+---
+
+```{r packages}
+library(tidyverse)
+library(here)
+```
