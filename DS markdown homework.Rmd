@@ -124,3 +124,38 @@ Use a summary table and plots to investigate whether data equally precise for pa
 ds %>% group_by(age_group) %>% summarize(across(precision, list(M = mean, MIN = min, MAX = max))) %>% kable()
 ```
 
+```{r}
+ds %>% ggplot(aes(x = age_group, y = precision)) + geom_boxplot() + geom_hline(yintercept = 2.5)
+```
+
+```{r}
+ds %>% ggplot(aes(x = age, y = precision)) + geom_point() + geom_hline(yintercept = 2.5)
+```
+
+### 3B Age
+
+Convert age to years so that it can be more easily compared to age_group. Visualize age in years by `age_group` to see whether participants are the correct age for their group
+
+```{r}
+ds <- ds %>% mutate(age_years = age/365.25)
+ds %>% group_by(id, age_group) %>% 
+  summarize(age_years = mean(age_years)) %>% 
+  ggplot(aes(y = age_group, x = age_years)) + geom_boxplot()
+```
+
+Another option would be to facet by age group and to let the scales be "free" to get a better look
+
+```{r}
+ds %>% group_by(id, age_group) %>% 
+  summarize(age_years = mean(age_years)) %>% 
+  ggplot(aes(y = age_years)) + 
+  geom_boxplot() + 
+  facet_wrap("age_group", scales = "free")
+```
+
+Make a summary table of age in years by age group to check whether all participants' ages are correct
+
+```{r}
+ds %>% group_by(age_group) %>% summarize(min_age = min(age_years), max_age = max(age_years))
+```
+
