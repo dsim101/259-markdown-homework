@@ -1,12 +1,15 @@
 ---
 title: "Exploratory Data Analysis"
-output: 
-html_document:
-  toc: true
-  toc_float: true
+author: Deja Simon
+date: 3/2/2021
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
 ---
 
-```{r include = FALSE}
+```{r setup, include = FALSE}
 library(tidyverse)
 library(here)
 ```
@@ -16,9 +19,9 @@ This project has two raw data files at different scales from a study of infants,
 I wrote Steps 1 and 2 to import and merge the data, and kept them here for your reference.
 Skip down to Step 3 to work on EDA
 
-#SOURCE DESCRIPTION
+##SOURCE DESCRIPTION
 
-## FILE 1: auc.csv
+### FILE 1: auc.csv
 
 Columns:
 
@@ -29,3 +32,26 @@ Columns:
 * AUC_dist (area-under-the-curve for a distance model)
 
 AUC values indicate how well each model predicted where participants looked when watching a video. AUC values can range from 0-1 where .5 is chance and 1 is perfect prediction
+
+### FILE 2: participants_info_full_headers.csv
+
+Columns:
+
+* id (unique participant identifier, matches auc.csv)
+  * age_group (a categorical age variable with levels:
+  * ".5-1 y" "1-1.5 y" "1.5-2 y" "2-4 y" "4-6 y" "8-10 y" "adult" 
+  * precision (a quality measure of the eye data, smaller is better)
+* 7 columns of "Seen X" the stimulus video before the study coded as SEEN (1), NOT SEEN (2), NOT SURE (3) 
+
+## STEP 1: Read in AUC data
+
+Code `stim` as a factor.
+
+```{r eval = FALSE}
+auc <- read_csv(here("data_raw", "auc_bystim.csv"))
+stim_levels <- 1:7
+stim_labels <- c("Fallon","Feist","Pentatonix","Science","Rube","Plane","Dogs")
+auc <- auc %>% mutate(stim = factor(stim, levels = stim_levels, labels = stim_labels))
+```
+
+## STEP 2: Read in participant info data
